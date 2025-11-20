@@ -1,22 +1,30 @@
-#coding:utf-8
-# -*- coding:utf -*-
-def secante(f, a, b, epsilon, max_iterations):
-    x0 = a
-    x1 = b
-    i = 0
+import math
 
-    while abs(f(x1)) > epsilon and i < max_iterations:
-        if f(x1) - f(x0) == 0:
-            raise ValueError("La méthode de la sécante ne peut pas être appliquée lorsque f(x1) - f(x0) est égal à zéro.")
+def secante(fonction, x0, x1, precision = 1e-10, max_iteration = 100):
+    
+    for i in range(max_iteration):
+        f0 = fonction(x0)
+        f1 = fonction(x1)
         
-        x2 = x1 - (f(x1) * (x1 - x0)) / (f(x1) - f(x0))
-        x0 = x1
-        x1 = x2
-        i += 1
+        if f1-f0 ==0:
+            print("Division par 0 n'est pas valide : indéterminée")
+            
+            return None
+        
+        x2 = x1 -f1 * (x1 - x0) / (f1 - f0)
+        
+        if abs(x2 - x1) < precision:
+            return x2
+        
+        x0,x1 = x1,  x2
+        
+    print("Itération atteitn")
+        
+    return x2
+    
+def fonction(x):
+    return (x-1)/(x+1)
+    
+solution = secante(fonction, -2,2)
 
-    if i == max_iterations:
-        raise ValueError("La méthode de la sécante n'a pas convergé après le nombre maximum d'itérations.")
-
-    print("la methode de la sécante admet une solution x0: ", x1, "à la {i} ième itération")
-
-secante(f=lambda x: x**2 -1, a=-2, b=2, epsilon=0.0001, max_iterations=10)
+print(f"soluton:{solution}")

@@ -16,7 +16,7 @@ def balayage(fonction, a,b, h=0.001):
 
 def fonction(x):
 
-    return x**2 -1
-interval = balayage(fonction, -2,2,h=0.1)
+    return (x-1)/(x+1)
+interval = balayage(fonction, -2,  2,h=0.1)
 
 print(interval)

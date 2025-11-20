@@ -24,11 +24,12 @@ def newton(fonction, dfonction, x0, precision = 1e-10, max_iteration = 100):
 
 
 def fonction(x):
-    return x**3 -x -2
+    return (x-1)/(x+1)
 
 def dfonction(x):
-    return 3*x**2 -1
+    return (2/x**2 -1 )
 
-solution = newton(fonction, dfonction, x0= 1.5)
+solution = newton(fonction, dfonction, x0= 1)
+solution = round(solution, 4)
 
 print(f"racine trouvée est: {solution}")

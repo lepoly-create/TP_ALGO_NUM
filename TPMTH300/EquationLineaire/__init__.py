@@ -1,0 +1,1 @@
+"""EquationLineaire subpackage."""

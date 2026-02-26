@@ -1,0 +1,51 @@
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C / compiled extensions
+*.so
+*.pyd
+*.dll
+
+# Windows executables
+*.exe
+*.com
+*.msi
+
+# Object files, archives, libraries
+*.o
+*.obj
+*.a
+*.lib
+
+# Generic binary and compiled outputs
+*.class
+*.jar
+*.bin
+*.out
+*.elf
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.pytest_cache/
+
+# Ignore compiled Python wheel files
+*.whl

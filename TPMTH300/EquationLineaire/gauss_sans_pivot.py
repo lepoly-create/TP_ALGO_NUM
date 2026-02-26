@@ -1,10 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# =============================================================================
-# Méthodes directes de résolution de systèmes linéaires
-# =============================================================================
-
 def gauss_sans_pivot(A, b):
     """
     Résolution de Ax = b par élimination de Gauss sans pivot.
@@ -26,3 +22,13 @@ def gauss_sans_pivot(A, b):
     for i in range(n - 1, -1, -1):
         x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i]
     return x
+
+# if __name__ == "__main__":
+#     # petit test rapide
+#     A = [[2.0, 1.0, -1.0],
+#          [ -3.0, -1.0, 2.0], 
+#          [ -2.0, 1.0, 2.0]
+#          ]
+#     b = [8.0, -11.0, -3.0]
+#     sol = gauss_sans_pivot(A, b)
+#     print("Solution:", [f"{v:.2g}" for v in sol])

@@ -26,3 +26,16 @@ def gauss_pivot_partiel(A, b):
     for i in range(n - 1, -1, -1):
         x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i]
     return x
+
+if __name__ == "__main__":
+    import numpy as _np
+
+    # Exemple pour tester le pivot partiel : premier pivot très petit
+    A = _np.array([[1e-12, 1.0, 2.0],
+                   [1.0, 2.0, 3.0],
+                   [4.0, 5.0, 6.0]])
+    b = _np.array([3.0, 6.0, 15.0])
+
+    sol = gauss_pivot_partiel(A, b)
+    # Affichage compact
+    print("Solution (pivot partiel):", [f"{float(v):.4g}" for v in sol])

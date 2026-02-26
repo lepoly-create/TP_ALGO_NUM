@@ -42,3 +42,16 @@ def gauss_pivot_total(A, b):
     for i in range(n):
         x[col_order[i]] = x_temp[i]
     return x
+
+
+if __name__ == "__main__":
+    import numpy as _np
+
+    # Exemple conçu pour nécessiter un pivot total (colonne 0 contient un zéro)
+    A = _np.array([[0.0, 2.0, -1.0],
+                   [1.0, -2.0, 3.0],
+                   [2.0, 3.0, 1.0]])
+    b = _np.array([3.0, -1.0, 4.0])
+
+    x = gauss_pivot_total(A, b)
+    print("Solution (pivot total):", [f"{v:.4g}" for v in x])

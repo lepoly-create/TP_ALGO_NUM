@@ -24,7 +24,12 @@ from EQUADIFF.runge_kutta4 import runge_kutta_4
 if __name__ == "__main__":
     print("=== Exemples d'utilisation des méthodes ===")
     print("\n1. Résolution de systèmes linéaires")
-    A = np.array([[3, 2, -1], [2, -2, 4], [-1, 0.5, -1]])
+    A = np.array([
+        
+        [3, 2, -1], 
+        [2, -2, 4], 
+        [-1, 0.5, -1]]
+    )
     b = np.array([1, -2, 0])
     print("Système A x = b")
     print("A =\n", A)
@@ -56,7 +61,11 @@ if __name__ == "__main__":
     print("Lc @ Uc =\n", Lc @ Uc)
 
     # Pour Cholesky, il faut une matrice symétrique définie positive
-    A_pos = np.array([[4, 2, 1], [2, 5, 3], [1, 3, 6]])
+    A_pos = np.array([
+        [4, 2, 1], 
+        [2, 5, 3], 
+        [1, 3, 6]
+    ])
     L_chol = cholesky(A_pos)
     print("\nCholesky :")
     print("L =\n", L_chol)

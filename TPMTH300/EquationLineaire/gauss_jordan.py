@@ -25,3 +25,16 @@ def gauss_jordan(A, b):
                 M[i, k:] -= factor * M[k, k:]
     # La dernière colonne de M contient la solution
     return M[:, -1]
+
+
+if __name__ == "__main__":
+    import numpy as _np
+
+    # Exemple pour tester Gauss-Jordan (nécessite permutations)
+    A = _np.array([[0.0, 2.0, 1.0],
+                   [1.0, -2.0, 3.0],
+                   [2.0, 3.0, 1.0]])
+    b = _np.array([3.0, -1.0, 4.0])
+
+    x = gauss_jordan(A, b)
+    print("Solution (Gauss-Jordan):", [f"{v:.4g}" for v in x])

@@ -1,3 +1,4 @@
+
 # TP_ALGO_NUM — Travaux pratiques d'algorithmes numériques
 
 Ce dépôt contient des implémentations pédagogiques en Python pour des méthodes numériques courantes : résolution de systèmes linéaires, décompositions matricielles, interpolation, méthodes itératives et résolution d'équations différentielles ordinaires.
@@ -293,4 +294,4 @@ RK4 :
 $$k_1=f(t_n,y_n),\ k_2=f(t_n+h/2,y_n+h k_1/2),\ k_3=f(t_n+h/2,y_n+h k_2/2),\ k_4=f(t_n+h,y_n+h k_3),$$
 $$y_{n+1}=y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4).$$
 
-Implémentation : stocker t et y sur la grille, boucle de pas, évaluer f aux temps requis.
+Implémentation : stocker t et y sur la grille, boucle de pas, évaluer f aux temps requis

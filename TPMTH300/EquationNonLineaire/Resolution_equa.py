@@ -1,7 +1,12 @@
 # -*- coding:Utf-8 -*-
 from sympy import symbols, sympify, lambdify
-from TPMTH300.EquationNonLineaire.MethodeResolution import methodeDichotomie, methodeSecante, methodeNewtonRaphson, methodePointFix
-from TPMTH300.EquationNonLineaire.Accueil_menu import rectangle_bienvenu_complet, methodeDeResolution, saisirToleranceIterations, saisirFonction
+
+try:
+    from TPALGONUM.TP.TPMTH300.EquationNonLineaire.MethodeResolution import methodeDichotomie, methodeSecante, methodeNewtonRaphson, methodePointFix
+    from TPALGONUM.TP.TPMTH300.EquationNonLineaire.Accueil_menu import rectangle_bienvenu_complet, methodeDeResolution, saisirToleranceIterations, saisirFonction
+except Exception:
+    from MethodeResolution import methodeDichotomie, methodeSecante, methodeNewtonRaphson, methodePointFix
+    from Accueil_menu import rectangle_bienvenu_complet, methodeDeResolution, saisirToleranceIterations, saisirFonction
 
 x=  symbols('x')
 
@@ -39,7 +44,8 @@ def main():
             try:
                 choose = int(input("Entrez un number de la méthode (1 à 4); "))
 
-                if (choose <= 4 or choose >= 1):
+                # validation correcte : 1 <= choose <= 4
+                if 1 <= choose <= 4:
                     break
                 else:
                     print("Le numéro doit être un entier compris entre 1 et 4")
@@ -101,8 +107,9 @@ def main():
         elif choose == 4:
             # Exécution de la méthode du point fixe
             print("Saisissez la fonction phi(x) telle que x = phi(x) pour le point fixe.")
-            phi_expression = saisirFonction()
+            phi_saisie = saisirFonction()
             try:
+                phi_expression = sympify(phi_saisie)
                 phi = lambdify(x, phi_expression, 'math')
             except Exception as e:
                 print(f"Erreur lors de l'interprétation de phi(x): {e}")

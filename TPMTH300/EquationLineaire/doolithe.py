@@ -20,6 +20,24 @@ def doolittle_lu(A):
     return L, U
 
 
+def doolittle_solve(A, b):
+    """
+    Factorise A en L, U puis résout A x = b.
+    Retourne (L, U, x).
+    """
+    L, U = doolittle_lu(A)
+    n = A.shape[0]
+    # Substitution avant L y = b
+    y = np.zeros(n)
+    for i in range(n):
+        y[i] = (b[i] - np.dot(L[i, :i], y[:i])) / L[i, i]
+    # Substitution arrière U x = y
+    x = np.zeros(n)
+    for i in range(n - 1, -1, -1):
+        x[i] = (y[i] - np.dot(U[i, i + 1:], x[i + 1:])) / U[i, i]
+    return L, U, x
+
+
 if __name__ == "__main__":
     import numpy as np
 

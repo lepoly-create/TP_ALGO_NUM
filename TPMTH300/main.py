@@ -4,9 +4,9 @@ from EquationLineaire.gauss_sans_pivot import gauss_sans_pivot
 from EquationLineaire.gauss_pivot_partiel import gauss_pivot_partiel
 from EquationLineaire.gauss_pivot_total import gauss_pivot_total
 from EquationLineaire.gauss_jordan import gauss_jordan
-from EquationLineaire.doolithe import doolittle_lu
-from EquationLineaire.crout import crout_lu
-from EquationLineaire.cholesky import cholesky
+from EquationLineaire.doolithe import doolittle_lu, doolittle_solve
+from EquationLineaire.crout import crout_lu, crout_solve
+from EquationLineaire.cholesky import cholesky, cholesky_solve
 from ITERACTIVES.jacobi import jacobi
 from ITERACTIVES.gauss_seidel import gauss_seidel
 from INTERPOLATION.lagrange import lagrange_interpolation
@@ -26,11 +26,14 @@ if __name__ == "__main__":
     print("\n1. Résolution de systèmes linéaires")
     A = np.array([
         
-        [3, 2, -1], 
-        [2, -2, 4], 
-        [-1, 0.5, -1]]
+        [1, 2, 3, 4], 
+        
+        [2, 3, 4, 1],
+        [3, 4, 1 , 2],
+        [4, 1, 2, 3]
+    ]
     )
-    b = np.array([1, -2, 0])
+    b = np.array([2, -2, 2, -2])
     print("Système A x = b")
     print("A =\n", A)
     print("b =", b)
@@ -53,36 +56,55 @@ if __name__ == "__main__":
     print("U =\n", U)
     # Vérification : A ≈ L @ U
     print("L @ U =\n", L @ U)
+    # Résolution A x = b via LU (Doolittle)
+    Ld, Ud, x_d = doolittle_solve(A, b)
+    print("Solution via Doolittle:", x_d)
 
     Lc, Uc = crout_lu(A)
     print("\nFactorisation Crout :")
     print("L =\n", Lc)
     print("U =\n", Uc)
     print("Lc @ Uc =\n", Lc @ Uc)
+    # Résolution A x = b via Crout
+    Lcr, Ucr, x_cr = crout_solve(A, b)
+    print("Solution via Crout:", x_cr)
 
     # Pour Cholesky, il faut une matrice symétrique définie positive
     A_pos = np.array([
-        [4, 2, 1], 
-        [2, 5, 3], 
-        [1, 3, 6]
+        [1, 2, 3, 4],
+
+        [2, 3, 4, 1],
+        [3, 4, 1, 2],
+        [4, 1, 2, 3]
     ])
-    L_chol = cholesky(A_pos)
+    # Tentative de décomposition et résolution par Cholesky
+    L_chol, x_ch = cholesky_solve(A_pos, b)
     print("\nCholesky :")
-    print("L =\n", L_chol)
-    print("L @ L.T =\n", L_chol @ L_chol.T)
+    if L_chol is None:
+        print("Cholesky impossible : la matrice n'est pas symétrique définie positive.")
+    else:
+        print("L =\n", L_chol)
+        print("L @ L.T =\n", L_chol @ L_chol.T)
+        print("Solution via Cholesky:", x_ch)
 
     print("\n2. Méthodes itératives")
-    A_diag_dom = np.array([[4, 1, 0], [1, 4, 1], [0, 1, 4]])
-    b_it = np.array([1, 2, 3])
-    x0 = np.zeros(3)
+    A_diag_dom = np.array([
+        [1, 2, 3, 4],
+
+        [2, 3, 4, 1],
+        [3, 4, 1, 2],
+        [4, 1, 2, 3]
+    ])
+    b_it = np.array([2, -2, 2, -2])
+    x0 = np.zeros(4)
     x_jac, it_jac, err_jac = jacobi(A_diag_dom, b_it, x0, tol=1e-6, max_iter=100)
     print("Jacobi :", x_jac, "en", it_jac, "itérations")
     x_gs, it_gs, err_gs = gauss_seidel(A_diag_dom, b_it, x0, tol=1e-6, max_iter=100)
     print("Gauss‑Seidel :", x_gs, "en", it_gs, "itérations")
 
     print("\n3. Interpolation")
-    x_pts = np.array([0, 1, 2, 3, 4])
-    y_pts = np.array([1, 2, 0, 5, 3])
+    x_pts = np.array([-0.86 , -0.67 , 0 , 0.5 , 0.25 ])
+    y_pts = np.array([1.21 , 1 , 0, 0.87 , 0.21 ])
     x_eval = np.linspace(0, 4, 100)
     y_lag = lagrange_interpolation(x_pts, y_pts, x_eval)
     y_new = newton_interpolation(x_pts, y_pts, x_eval)
@@ -109,20 +131,20 @@ if __name__ == "__main__":
     plt.title("Moindres carrés")
     plt.show()
 
-    print("\n5. Équations différentielles")
-    def f_ode(t, y):
-        return -2 * y + t + 1
-    y0 = 1.0
-    t_span = (0, 5)
-    h = 0.1
-    t, y_euler = euler_explicite(f_ode, y0, t_span, h)
-    t, y_rk2 = runge_kutta_2(f_ode, y0, t_span, h, method='midpoint')
-    t, y_rk4 = runge_kutta_4(f_ode, y0, t_span, h)
+    # print("\n5. Équations différentielles")
+    # def f_ode(t, y):
+    #     return -2 * y + t + 1
+    # y0 = 1.0
+    # t_span = (0, 5)
+    # h = 0.1
+    # t, y_euler = euler_explicite(f_ode, y0, t_span, h)
+    # t, y_rk2 = runge_kutta_2(f_ode, y0, t_span, h, method='midpoint')
+    # t, y_rk4 = runge_kutta_4(f_ode, y0, t_span, h)
 
-    plt.figure()
-    plt.plot(t, y_euler, ':', label='Euler')
-    plt.plot(t, y_rk2, '--', label='RK2')
-    plt.plot(t, y_rk4, '-', label='RK4')
-    plt.legend()
-    plt.title("Résolution d'équation différentielle")
-    plt.show()
+    # plt.figure()
+    # plt.plot(t, y_euler, ':', label='Euler')
+    # plt.plot(t, y_rk2, '--', label='RK2')
+    # plt.plot(t, y_rk4, '-', label='RK4')
+    # plt.legend()
+    # plt.title("Résolution d'équation différentielle")
+    # plt.show()

@@ -15,26 +15,31 @@ from INTERPOLATION.moindres_carres import least_squares_poly
 from EQUADIFF.euler_explicite import euler_explicite
 from EQUADIFF.runge_kutta2 import runge_kutta_2
 from EQUADIFF.runge_kutta4 import runge_kutta_4
+from EquationLineaire.thomas import thomas_solve, thomas_lu
+from EquationLineaire.common import precision
 
 
 # =============================================================================
 # Exemples d'utilisation
 # =============================================================================
 
+# Matrice et second membre globaux réutilisables
+A_global = np.array([
+    [1, 2, 3, 4],
+    [2, 3, 4, 1],
+    [3, 4, 1, 2],
+    [4, 1, 2, 3]
+])
+b_global = np.array([2, -2, 2, -2])
+
+
 if __name__ == "__main__":
     print("=== Exemples d'utilisation des méthodes ===")
     print("\n1. Résolution de systèmes linéaires")
-    A = np.array([
-        
-        [1, 2, 3, 4], 
-        
-        [2, 3, 4, 1],
-        [3, 4, 1 , 2],
-        [4, 1, 2, 3]
-    ]
-    )
-    b = np.array([2, -2, 2, -2])
-    print("Système A x = b")
+    # utiliser la matrice et le second membre globaux
+    A = A_global
+    b = b_global
+    print("Système A x = b (variables globales)")
     print("A =\n", A)
     print("b =", b)
 
@@ -70,13 +75,7 @@ if __name__ == "__main__":
     print("Solution via Crout:", x_cr)
 
     # Pour Cholesky, il faut une matrice symétrique définie positive
-    A_pos = np.array([
-        [1, 2, 3, 4],
-
-        [2, 3, 4, 1],
-        [3, 4, 1, 2],
-        [4, 1, 2, 3]
-    ])
+    A_pos = A_global
     # Tentative de décomposition et résolution par Cholesky
     L_chol, x_ch = cholesky_solve(A_pos, b)
     print("\nCholesky :")
@@ -86,16 +85,29 @@ if __name__ == "__main__":
         print("L =\n", L_chol)
         print("L @ L.T =\n", L_chol @ L_chol.T)
         print("Solution via Cholesky:", x_ch)
+        
+
+    # Exemple : résolution d'un système tridiagonal avec l'algorithme de Thomas
+    T = A_global
+    b_tri = b_global
+    x_thomas = thomas_solve(T, b_tri)
+    if x_thomas is not None:
+        print("\nThomas (tridiagonal) solution:", x_thomas)
+        try:
+            L_tri, U_tri = thomas_lu(T)
+            print("Thomas LU - L =\n", L_tri)
+            print("Thomas LU - U =\n", U_tri)
+            print("L @ U =\n", L_tri @ U_tri)
+        except Exception as e:
+            print("Impossible de calculer LU tridiagonal:", e)
+        res_norm = precision(T, x_thomas, b_tri)
+        print("\nRésidu ||Ax-b|| (Thomas) :", res_norm)
+
 
     print("\n2. Méthodes itératives")
-    A_diag_dom = np.array([
-        [1, 2, 3, 4],
-
-        [2, 3, 4, 1],
-        [3, 4, 1, 2],
-        [4, 1, 2, 3]
-    ])
-    b_it = np.array([2, -2, 2, -2])
+    # réutiliser la matrice globale pour les méthodes itératives
+    A_diag_dom = A
+    b_it = b
     x0 = np.zeros(4)
     x_jac, it_jac, err_jac = jacobi(A_diag_dom, b_it, x0, tol=1e-6, max_iter=100)
     print("Jacobi :", x_jac, "en", it_jac, "itérations")
@@ -116,6 +128,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.title("Interpolation polynomiale")
     plt.show()
+
 
     print("\n4. Moindres carrés")
     x_noisy = np.linspace(0, 5, 20)

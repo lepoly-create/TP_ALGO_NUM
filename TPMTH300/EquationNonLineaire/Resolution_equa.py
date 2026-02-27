@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
-from sympy import symbols, sympify, lambdify
+from sympy import symbols, sympify, lambdify1
+
 
 try:
     from TPALGONUM.TP.TPMTH300.EquationNonLineaire.MethodeResolution import methodeDichotomie, methodeSecante, methodeNewtonRaphson, methodePointFix
